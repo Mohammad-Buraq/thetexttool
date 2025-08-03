@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- Main Pages -->
+  <url><loc>https://thetexttool.com/</loc></url>
+  <url><loc>https://thetexttool.com/about</loc></url>
+
+  <!-- Tools -->
+  <url><loc>https://thetexttool.com/tools/wordcounter</loc></url>
+  <url><loc>https://thetexttool.com/tools/charactercounter</loc></url>
+  <url><loc>https://thetexttool.com/tools/uppercaseconverter</loc></url>
+  <url><loc>https://thetexttool.com/tools/removeduplicatelines</loc></url>
+  <url><loc>https://thetexttool.com/tools/textsorter</loc></url>
+  <url><loc>https://thetexttool.com/tools/reversetext</loc></url>
+  <url><loc>https://thetexttool.com/tools/texttobinary</loc></url>
+  <url><loc>https://thetexttool.com/tools/texttomorse</loc></url>
+  <url><loc>https://thetexttool.com/tools/textdiff</loc></url>
+  <url><loc>https://thetexttool.com/tools/removeemptylines</loc></url>
+  <url><loc>https://thetexttool.com/tools/titlecaseconverter</loc></url>
+  <url><loc>https://thetexttool.com/tools/jsonformatter</loc></url>
+  <url><loc>https://thetexttool.com/tools/textcleaner</loc></url>
+  <url><loc>https://thetexttool.com/tools/texttoemoji</loc></url>
+  <url><loc>https://thetexttool.com/tools/removelinebreaks</loc></url>
+</urlset>
