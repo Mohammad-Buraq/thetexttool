@@ -13,16 +13,16 @@ export default function AdminDashboard() {
     { name: 'Settings', icon: <Settings size={18} />, key: 'settings' },
   ];
 
-  const correctPassword = 'Buraq123'; // Change this to your secret
+  const correctPassword = import.meta.env.VITE_ADMIN_PASSWORD;
 
   if (!authenticated) {
     return (
-      <div className="h-screen bg-black flex items-center justify-center text-white">
-        <div className="bg-gray-900 p-6 rounded shadow-md w-full max-w-sm text-center">
+      <div className="h-screen bg-gray-100 flex items-center justify-center text-gray-800">
+        <div className="bg-white p-6 rounded shadow-md w-full max-w-sm text-center border">
           <h2 className="text-xl mb-4 font-bold">🔒 Admin Access</h2>
           <input
             type="password"
-            className="w-full p-2 rounded text-black mb-3"
+            className="w-full p-2 border rounded text-black mb-3"
             placeholder="Enter Admin Password"
             value={inputPassword}
             onChange={(e) => setInputPassword(e.target.value)}
@@ -34,7 +34,7 @@ export default function AdminDashboard() {
           />
           <button
             onClick={() => inputPassword === correctPassword && setAuthenticated(true)}
-            className="bg-blue-600 px-4 py-2 rounded hover:bg-blue-700 transition"
+            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
           >
             Login
           </button>
