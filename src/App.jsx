@@ -19,10 +19,7 @@ import TextCleaner from './tools/TextCleaner';
 import TextToEmoji from './tools/TextToEmoji';
 import RemoveLineBreaks from './tools/RemoveLineBreaks';
 import RemoveEmptyLines from './tools/RemoveEmptyLines';
-
-
-
-
+import AdminDashboard from './pages/AdminDashboard';
 
 
 function App() {
@@ -48,6 +45,7 @@ function App() {
           <Route path="/tools/texttoemoji" element={<TextToEmoji />} />
           <Route path="/tools/removelinebreaks" element={<RemoveLineBreaks />} />
           <Route path="/tools/removeemptylines" element={<RemoveEmptyLines />} />
+          <Route path="/admin" element={<AdminDashboard />} />
         </Routes>
       </Layout>
     </Router>
