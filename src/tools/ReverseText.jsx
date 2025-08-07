@@ -1,11 +1,6 @@
 // src/tools/ReverseText.jsx
 import React, { useState } from "react";
 import ToolWrapper from "../components/ToolWrapper";
-import {
-  copyToClipboard,
-  downloadOutput,
-  clearAllFields,
-} from "../utils/toolUtils";
 
 function ReverseText() {
   const [text, setText] = useState("");
@@ -14,6 +9,35 @@ function ReverseText() {
   const handleReverse = (value) => {
     setText(value);
     setReversed(value.split("").reverse().join(""));
+  };
+
+  const copyToClipboard = (text) => {
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(text);
+      alert("Copied to clipboard!");
+    } else {
+      const textArea = document.createElement("textarea");
+      textArea.value = text;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand("copy");
+      document.body.removeChild(textArea);
+      alert("Copied to clipboard!");
+    }
+  };
+
+  const downloadOutput = (text, filename) => {
+    const blob = new Blob([text], { type: "text/plain" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = filename;
+    link.click();
+    URL.revokeObjectURL(link.href);
+  };
+
+  const clearAllFields = () => {
+    setText("");
+    setReversed("");
   };
 
   return (
@@ -41,9 +65,7 @@ function ReverseText() {
         <button onClick={() => downloadOutput(reversed, "reversed-text.txt")}>
           Download Output
         </button>
-        <button onClick={() => clearAllFields(setText, setReversed)}>
-          Clear
-        </button>
+        <button onClick={clearAllFields}>Clear</button>
       </div>
     </ToolWrapper>
   );
