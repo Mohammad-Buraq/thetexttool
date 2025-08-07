@@ -23,7 +23,7 @@ function Layout({ children }) {
       <footer className="bg-white dark:bg-black text-sm text-gray-600 dark:text-gray-400 border-t">
         <div className="max-w-6xl mx-auto px-4 py-6 flex justify-between items-center flex-wrap gap-4">
           <p>© {new Date().getFullYear()} TextTools AI. All rights reserved.</p>
-          <p>Built with ❤️ by ChatGPT & You</p>
+          <p>Built with ❤️</p>
         </div>
       </footer>
     </div>
