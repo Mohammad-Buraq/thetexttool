@@ -1,60 +1,19 @@
-import React, { useState } from "react";
+import ToolWrapper from "../components/ToolWrapper";
+import { useState } from "react";
 
-function TitleCaseConverter() {
+export default function TitleCaseConverter() {
   const [text, setText] = useState("");
-  const [convertedText, setConvertedText] = useState("");
-
-  const toTitleCase = (str) => {
-    return str
-      .toLowerCase()
-      .split(" ")
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(" ");
-  };
-
-  const handleConvert = () => {
-    setConvertedText(toTitleCase(text));
-  };
-
-  const handleCopy = () => {
-    navigator.clipboard.writeText(convertedText);
-  };
-
-  const handleDownload = () => {
-    const blob = new Blob([convertedText], { type: "text/plain" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "title_case.txt";
-    a.click();
-    URL.revokeObjectURL(url);
-  };
+  const output = text.replace(
+    /\w\S*/g,
+    (word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+  );
 
   return (
-    <div className="tool-container">
-      <h2>Title Case Converter</h2>
-      <textarea
-        placeholder="Enter text here..."
-        value={text}
-        onChange={(e) => setText(e.target.value)}
-        rows={8}
-        className="input-box"
-      ></textarea>
-      <button onClick={handleConvert}>Convert to Title Case</button>
-
-      <h3>Output</h3>
-      <textarea
-        value={convertedText}
-        readOnly
-        rows={8}
-        className="output-box"
-      ></textarea>
-      <div className="button-group">
-        <button onClick={handleCopy}>Copy Output</button>
-        <button onClick={handleDownload}>Download Output</button>
-      </div>
-    </div>
+    <ToolWrapper
+      title="Title Case Converter"
+      inputValue={text}
+      setInputValue={setText}
+      outputValue={output}
+    />
   );
 }
-
-export default TitleCaseConverter;
