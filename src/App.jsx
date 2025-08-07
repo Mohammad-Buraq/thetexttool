@@ -20,6 +20,22 @@ import TextToEmoji from './tools/TextToEmoji';
 import RemoveLineBreaks from './tools/RemoveLineBreaks';
 import RemoveEmptyLines from './tools/RemoveEmptyLines';
 import AdminDashboard from './pages/AdminDashboard';
+import RemovePunctuation from './tools/RemovePunctuation';
+import RemoveNumbers from './tools/RemoveNumbers';
+import RemoveAllSpaces from './tools/RemoveAllSpaces';
+import SentenceCaseConverter from './tools/SentenceCaseConverter';
+import CamelCaseConverter from './tools/CamelCaseConverter';
+import KebabCaseConverter from './tools/KebabCaseConverter';
+import Base64Encode from './tools/Base64Encode';
+import Base64Decode from './tools/Base64Decode';
+import TextToUnicode from './tools/TextToUnicode';
+import UnicodeToText from './tools/UnicodeToText';
+import CapitalizeWords from './tools/CapitalizeWords';
+import UrlEncode from './tools/UrlEncode';
+import LowercaseConverter from './tools/LowercaseConverter';
+import TextRandomCase from './tools/TextRandomCase';
+import AddLineNumbers from './tools/AddLineNumbers';
+
 
 
 function App() {
@@ -45,6 +61,21 @@ function App() {
           <Route path="/tools/texttoemoji" element={<TextToEmoji />} />
           <Route path="/tools/removelinebreaks" element={<RemoveLineBreaks />} />
           <Route path="/tools/removeemptylines" element={<RemoveEmptyLines />} />
+          <Route path="/tools/removepunctuation" element={<RemovePunctuation />} />
+          <Route path="/tools/removenumbers" element={<RemoveNumbers />} />
+          <Route path="/tools/removeallspaces" element={<RemoveAllSpaces />} />
+          <Route path="/tools/sentencecaseconverter" element={<SentenceCaseConverter />} />
+          <Route path="/tools/camelcaseconverter" element={<CamelCaseConverter />} />
+          <Route path="/tools/kebabcaseconverter" element={<KebabCaseConverter />} />
+          <Route path="/tools/base64encode" element={<Base64Encode />} />
+          <Route path="/tools/base64decode" element={<Base64Decode />} />
+          <Route path="/tools/texttounicode" element={<TextToUnicode />} />
+          <Route path="/tools/unicodetotext" element={<UnicodeToText />} />
+          <Route path="/tools/capitalizewords" element={<CapitalizeWords />} />
+          <Route path="/tools/urlencode" element={<UrlEncode />} />
+          <Route path="/tools/lowercaseconverter" element={<LowercaseConverter />} />
+          <Route path="/tools/textrandomcase" element={<TextRandomCase />} />
+          <Route path="/tools/addlinenumbers" element={<AddLineNumbers />} />
           <Route path="/admin" element={<AdminDashboard />} />
         </Routes>
       </Layout>
