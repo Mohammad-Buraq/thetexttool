@@ -1,11 +1,6 @@
 // src/tools/TitleCaseConverter.jsx
 import React, { useState } from "react";
 import ToolWrapper from "../components/ToolWrapper";
-import {
-  copyToClipboard,
-  downloadOutput,
-  clearAllFields,
-} from "../utils/toolUtils";
 
 function TitleCaseConverter() {
   const [text, setText] = useState("");
@@ -19,6 +14,25 @@ function TitleCaseConverter() {
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
       .join(" ");
     setOutput(result);
+  };
+
+  const copyToClipboard = (text) => {
+    navigator.clipboard.writeText(text);
+  };
+
+  const downloadOutput = (content, filename) => {
+    const element = document.createElement("a");
+    const file = new Blob([content], { type: "text/plain" });
+    element.href = URL.createObjectURL(file);
+    element.download = filename;
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
+  };
+
+  const clearAllFields = () => {
+    setText("");
+    setOutput("");
   };
 
   return (
@@ -46,7 +60,7 @@ function TitleCaseConverter() {
         <button onClick={() => downloadOutput(output, "title-case.txt")}>
           Download Output
         </button>
-        <button onClick={() => clearAllFields(setText, setOutput)}>Clear</button>
+        <button onClick={clearAllFields}>Clear</button>
       </div>
     </ToolWrapper>
   );
