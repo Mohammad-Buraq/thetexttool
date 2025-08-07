@@ -1,69 +1,49 @@
-// src/tools/TitleCaseConverter.jsx
 import React, { useState } from "react";
 import ToolWrapper from "../components/ToolWrapper";
 
-function TitleCaseConverter() {
-  const [text, setText] = useState("");
-  const [output, setOutput] = useState("");
+const TitleCaseConverter = () => {
+  const [inputValue, setInputValue] = useState("");
+  const [outputValue, setOutputValue] = useState("");
 
-  const convertToTitleCase = (value) => {
-    setText(value);
-    const result = value
+  const convertToTitleCase = (text) => {
+    return text
       .toLowerCase()
       .split(" ")
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .map((word) =>
+        word.length > 0 ? word[0].toUpperCase() + word.slice(1) : ""
+      )
       .join(" ");
-    setOutput(result);
   };
 
-  const copyToClipboard = (text) => {
-    navigator.clipboard.writeText(text);
+  const handleInputChange = (value) => {
+    setInputValue(value);
+    setOutputValue(convertToTitleCase(value));
   };
 
-  const downloadOutput = (content, filename) => {
+  const handleCopyOutput = () => {
+    navigator.clipboard.writeText(outputValue);
+  };
+
+  const handleDownloadOutput = () => {
     const element = document.createElement("a");
-    const file = new Blob([content], { type: "text/plain" });
+    const file = new Blob([outputValue], { type: "text/plain" });
     element.href = URL.createObjectURL(file);
-    element.download = filename;
+    element.download = "titlecase.txt";
     document.body.appendChild(element);
     element.click();
-    document.body.removeChild(element);
-  };
-
-  const clearAllFields = () => {
-    setText("");
-    setOutput("");
   };
 
   return (
     <ToolWrapper
       title="Title Case Converter"
-      description="Convert any sentence into proper title case. Capitalize each word in your sentence."
-      keywords="title case, capitalize words, convert to title case"
-    >
-      <textarea
-        placeholder="Enter text to convert..."
-        value={text}
-        onChange={(e) => convertToTitleCase(e.target.value)}
-        className="tool-textarea"
-      ></textarea>
-
-      <textarea
-        placeholder="Output will appear here..."
-        value={output}
-        readOnly
-        className="tool-textarea"
-      ></textarea>
-
-      <div className="tool-button-group">
-        <button onClick={() => copyToClipboard(output)}>Copy Output</button>
-        <button onClick={() => downloadOutput(output, "title-case.txt")}>
-          Download Output
-        </button>
-        <button onClick={clearAllFields}>Clear</button>
-      </div>
-    </ToolWrapper>
+      description="Convert your text to Title Case (capitalize the first letter of each word)."
+      inputValue={inputValue}
+      outputValue={outputValue}
+      onInputChange={handleInputChange}
+      onCopyOutput={handleCopyOutput}
+      onDownloadOutput={handleDownloadOutput}
+    />
   );
-}
+};
 
 export default TitleCaseConverter;

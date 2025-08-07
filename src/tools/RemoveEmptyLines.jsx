@@ -1,13 +1,40 @@
 import React, { useState } from "react";
-import ToolWrapper from "../ToolWrapper";
-import { copyToClipboard, downloadText } from "../utils";
+import ToolWrapper from "../components/ToolWrapper";
+
+// Local helper: copy text to clipboard
+const copyToClipboard = (text) => {
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(text);
+  } else {
+    const textarea = document.createElement("textarea");
+    textarea.value = text;
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand("copy");
+    document.body.removeChild(textarea);
+  }
+};
+
+// Local helper: download text as file
+const downloadText = (text, filename) => {
+  const element = document.createElement("a");
+  const file = new Blob([text], { type: "text/plain" });
+  element.href = URL.createObjectURL(file);
+  element.download = filename;
+  document.body.appendChild(element);
+  element.click();
+  document.body.removeChild(element);
+};
 
 const RemoveEmptyLines = () => {
   const [input, setInput] = useState("");
   const [output, setOutput] = useState("");
 
   const removeLines = () => {
-    const cleaned = input.split("\n").filter(line => line.trim() !== "").join("\n");
+    const cleaned = input
+      .split("\n")
+      .filter((line) => line.trim() !== "")
+      .join("\n");
     setOutput(cleaned);
   };
 
@@ -25,8 +52,17 @@ const RemoveEmptyLines = () => {
       <div className="tool-button-group">
         <button onClick={removeLines}>Remove Empty Lines</button>
         <button onClick={() => copyToClipboard(output)}>Copy Output</button>
-        <button onClick={() => downloadText(output, "no-empty-lines.txt")}>Download Output</button>
-        <button onClick={() => { setInput(""); setOutput(""); }}>Clear</button>
+        <button onClick={() => downloadText(output, "no-empty-lines.txt")}>
+          Download Output
+        </button>
+        <button
+          onClick={() => {
+            setInput("");
+            setOutput("");
+          }}
+        >
+          Clear
+        </button>
       </div>
       <textarea
         placeholder="Result will appear here..."

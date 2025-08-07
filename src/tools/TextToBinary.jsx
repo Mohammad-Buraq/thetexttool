@@ -1,7 +1,5 @@
-// TextToBinary.js
 import React, { useState } from "react";
-import ToolWrapper from "../ToolWrapper";
-import { copyToClipboard, downloadOutput } from "../../utils";
+import ToolWrapper from "../components/ToolWrapper";
 
 function TextToBinary() {
   const [input, setInput] = useState("");
@@ -13,6 +11,23 @@ function TextToBinary() {
       .map((char) => char.charCodeAt(0).toString(2).padStart(8, "0"))
       .join(" ");
     setOutput(binary);
+  };
+
+  const copyToClipboard = async (text) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      alert("Copied to clipboard!");
+    } catch (err) {
+      alert("Failed to copy!");
+    }
+  };
+
+  const downloadOutput = (text, filename) => {
+    const blob = new Blob([text], { type: "text/plain" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = filename;
+    link.click();
   };
 
   return (

@@ -1,10 +1,26 @@
 import React, { useState } from "react";
-import ToolWrapper from "../ToolWrapper";
-import { copyToClipboard, downloadText } from "../utils";
+import ToolWrapper from "../components/ToolWrapper";
 
 const JSONFormatter = () => {
   const [input, setInput] = useState("");
   const [output, setOutput] = useState("");
+
+  // Inline helper functions
+  const copyToClipboard = (text) => {
+    navigator.clipboard.writeText(text).catch((err) => {
+      console.error("Failed to copy: ", err);
+    });
+  };
+
+  const downloadText = (text, filename) => {
+    const element = document.createElement("a");
+    const file = new Blob([text], { type: "text/plain" });
+    element.href = URL.createObjectURL(file);
+    element.download = filename;
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
+  };
 
   const formatJSON = () => {
     try {

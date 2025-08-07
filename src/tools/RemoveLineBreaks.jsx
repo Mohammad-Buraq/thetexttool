@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import ToolWrapper from "../ToolWrapper";
-import { copyToClipboard, downloadText } from "../utils";
+import ToolWrapper from "../components/ToolWrapper";
 
 const RemoveLineBreaks = () => {
   const [input, setInput] = useState("");
@@ -9,6 +8,24 @@ const RemoveLineBreaks = () => {
   const removeBreaks = () => {
     const result = input.replace(/[\r\n]+/g, " ");
     setOutput(result);
+  };
+
+  const copyToClipboard = async (text) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      alert("Output copied to clipboard!");
+    } catch (err) {
+      alert("Failed to copy!");
+    }
+  };
+
+  const downloadText = (text, filename) => {
+    const blob = new Blob([text], { type: "text/plain" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = filename;
+    link.click();
+    URL.revokeObjectURL(link.href);
   };
 
   return (
