@@ -2,52 +2,56 @@ import React, { useState } from "react";
 
 function TitleCaseConverter() {
   const [text, setText] = useState("");
+  const [convertedText, setConvertedText] = useState("");
 
-  const toSentenceCase = (txt) =>
-    txt.charAt(0).toUpperCase() + txt.slice(1).toLowerCase();
-
-  const toTitleCase = (txt) =>
-    txt
+  const toTitleCase = (str) => {
+    return str
       .toLowerCase()
       .split(" ")
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
       .join(" ");
+  };
 
-  const handleConvert = (type) => {
-    let converted = "";
-    switch (type) {
-      case "upper":
-        converted = text.toUpperCase();
-        break;
-      case "lower":
-        converted = text.toLowerCase();
-        break;
-      case "title":
-        converted = toTitleCase(text);
-        break;
-      case "sentence":
-        converted = toSentenceCase(text);
-        break;
-      default:
-        converted = text;
-    }
-    setText(converted);
+  const handleConvert = () => {
+    setConvertedText(toTitleCase(text));
+  };
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(convertedText);
+  };
+
+  const handleDownload = () => {
+    const blob = new Blob([convertedText], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "title_case.txt";
+    a.click();
+    URL.revokeObjectURL(url);
   };
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-10">
-      <h1 className="text-3xl font-bold mb-6">📝 Title Case Converter</h1>
+    <div className="tool-container">
+      <h2>Title Case Converter</h2>
       <textarea
-        className="w-full h-40 p-4 border rounded bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-700"
+        placeholder="Enter text here..."
         value={text}
         onChange={(e) => setText(e.target.value)}
-        placeholder="Enter your text..."
+        rows={8}
+        className="input-box"
       ></textarea>
-      <div className="flex flex-wrap gap-3 mt-4">
-        <button onClick={() => handleConvert("upper")} className="btn">UPPERCASE</button>
-        <button onClick={() => handleConvert("lower")} className="btn">lowercase</button>
-        <button onClick={() => handleConvert("title")} className="btn">Title Case</button>
-        <button onClick={() => handleConvert("sentence")} className="btn">Sentence case</button>
+      <button onClick={handleConvert}>Convert to Title Case</button>
+
+      <h3>Output</h3>
+      <textarea
+        value={convertedText}
+        readOnly
+        rows={8}
+        className="output-box"
+      ></textarea>
+      <div className="button-group">
+        <button onClick={handleCopy}>Copy Output</button>
+        <button onClick={handleDownload}>Download Output</button>
       </div>
     </div>
   );

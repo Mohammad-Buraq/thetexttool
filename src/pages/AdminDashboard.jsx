@@ -5,6 +5,7 @@ export default function AdminDashboard() {
   const [authenticated, setAuthenticated] = useState(false);
   const [inputPassword, setInputPassword] = useState('');
   const [activeTab, setActiveTab] = useState('overview');
+  const [searchTerm, setSearchTerm] = useState('');
 
   const tabs = [
     { name: 'Overview', icon: <LayoutDashboard size={18} />, key: 'overview' },
@@ -13,7 +14,19 @@ export default function AdminDashboard() {
     { name: 'Settings', icon: <Settings size={18} />, key: 'settings' },
   ];
 
+  const tools = [
+    { name: "Word Counter", status: "Active" },
+    { name: "Text Cleaner", status: "Active" },
+    { name: "Reverse Text", status: "Inactive" },
+    { name: "JSON Formatter", status: "Active" },
+    { name: "Text to Binary", status: "Active" },
+  ];
+
   const correctPassword = import.meta.env.VITE_ADMIN_PASSWORD;
+
+  const filteredTools = tools.filter(tool =>
+    tool.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   if (!authenticated) {
     return (
@@ -105,14 +118,58 @@ export default function AdminDashboard() {
         {activeTab === 'tools' && (
           <div className="bg-white p-4 rounded-lg shadow">
             <h3 className="text-lg font-bold mb-4">Tool Management</h3>
-            <p className="text-gray-500">(Feature coming soon)</p>
+            <input
+              type="text"
+              placeholder="Search tools..."
+              className="mb-4 p-2 border rounded w-full text-sm"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            <table className="w-full text-left text-sm">
+              <thead>
+                <tr className="border-b">
+                  <th className="pb-2">Tool Name</th>
+                  <th className="pb-2">Status</th>
+                  <th className="pb-2">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredTools.map((tool, index) => (
+                  <tr key={index} className="border-t">
+                    <td className="py-2">{tool.name}</td>
+                    <td className="py-2">
+                      <span
+                        className={`px-2 py-1 text-xs rounded-full ${
+                          tool.status === "Active"
+                            ? "bg-green-100 text-green-700"
+                            : "bg-red-100 text-red-700"
+                        }`}
+                      >
+                        {tool.status}
+                      </span>
+                    </td>
+                    <td className="py-2 space-x-2">
+                      <button className="text-blue-600 text-sm hover:underline">Edit</button>
+                      <button className="text-red-600 text-sm hover:underline">Delete</button>
+                      <button className="text-gray-600 text-sm hover:underline">
+                        {tool.status === "Active" ? "Deactivate" : "Activate"}
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         )}
 
         {activeTab === 'feedback' && (
           <div className="bg-white p-4 rounded-lg shadow">
             <h3 className="text-lg font-bold mb-4">User Feedback</h3>
-            <p className="text-gray-500">(Feature coming soon)</p>
+            <ul className="list-disc text-sm text-gray-600 pl-5 space-y-2">
+              <li>"Love the simplicity!"</li>
+              <li>"Please add dark mode support."</li>
+              <li>"JSON formatter doesn't handle nested objects well."</li>
+            </ul>
           </div>
         )}
 

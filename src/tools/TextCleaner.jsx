@@ -2,26 +2,49 @@ import React, { useState } from "react";
 
 function TextCleaner() {
   const [text, setText] = useState("");
+  const [cleanedText, setCleanedText] = useState("");
 
-  const cleanText = () => {
+  const handleClean = () => {
     let cleaned = text
-      .replace(/[\r\n\t]+/g, " ")           // remove line breaks and tabs
-      .replace(/\s+/g, " ")                // collapse multiple spaces
-      .replace(/[^\x20-\x7E]+/g, "")       // remove non-ASCII
-      .trim();
-    setText(cleaned);
+      .replace(/[^\x20-\x7E]/g, "") // remove non-printable ASCII
+      .replace(/\s+/g, " ")         // collapse multiple whitespaces to one space
+      .trim();                      // trim leading/trailing whitespace
+    setCleanedText(cleaned);
+  };
+
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(cleanedText);
+  };
+
+  const downloadText = () => {
+    const blob = new Blob([cleanedText], { type: "text/plain" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "cleaned_text.txt";
+    link.click();
   };
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-10">
-      <h1 className="text-3xl font-bold mb-6">🧹 Text Cleaner</h1>
+    <div className="tool-container">
+      <h2>Text Cleaner</h2>
       <textarea
-        className="w-full h-40 p-4 border rounded bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-700"
+        rows="8"
+        placeholder="Enter text here..."
         value={text}
         onChange={(e) => setText(e.target.value)}
-        placeholder="Paste your messy text..."
       ></textarea>
-      <button onClick={cleanText} className="btn mt-4">Clean Text</button>
+      <button onClick={handleClean}>Clean</button>
+
+      {cleanedText && (
+        <div className="output-section">
+          <h3>Cleaned Output</h3>
+          <textarea rows="8" value={cleanedText} readOnly></textarea>
+          <div className="button-group">
+            <button onClick={copyToClipboard}>Copy Output</button>
+            <button onClick={downloadText}>Download Output</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

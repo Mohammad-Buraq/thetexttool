@@ -1,47 +1,64 @@
 import React, { useState } from "react";
 
-const emojiMap = {
-  happy: "😊", sad: "😢", love: "❤️", laugh: "😂", smile: "😄", angry: "😠",
-  fire: "🔥", cool: "😎", cat: "🐱", dog: "🐶", coffee: "☕", pizza: "🍕",
-  sun: "☀️", moon: "🌙", star: "⭐", music: "🎵", dance: "💃", drink: "🥤",
-  idea: "💡", phone: "📱", car: "🚗", work: "💼", travel: "✈️",
-  rain: "🌧️", snow: "❄️", beach: "🏖️", book: "📚", art: "🎨",
-  money: "💰", cake: "🎂", party: "🎉", shopping: "🛍️",
-  happybirthday: "🎂", gift: "🎁", email: "📧", camera: "📷", game: "🎮",
-  health: "🩺", doctor: "👨‍⚕️", sport: "⚽", basketball: "🏀", soccer: "⚽",
-  football: "🏈", film: "🎬", chef: "👨‍🍳"
-  // … include hundreds more for pets, food, travel, emotions, etc.
-};
-
 function TextToEmoji() {
-  const [input, setInput] = useState("");
-  const [output, setOutput] = useState("");
+  const [inputText, setInputText] = useState("");
+  const [emojiOutput, setEmojiOutput] = useState("");
+
+  const emojiMap = {
+    a: "🅰️", b: "🅱️", c: "🌜", d: "🌛", e: "🎗️", f: "🎏", g: "🌀",
+    h: "♓", i: "🎐", j: "🎷", k: "🎋", l: "👢", m: "〽️", n: "🎶",
+    o: "⚽", p: "🅿️", q: "🍳", r: "🌱", s: "💲", t: "🌴", u: "⛎",
+    v: "✅", w: "🔱", x: "❌", y: "🍸", z: "💤",
+    " ": "   "
+  };
 
   const convertToEmoji = () => {
-    const words = input.split(/\s+/);
-    const converted = words.map((w) => {
-      const clean = w.toLowerCase().replace(/[^\w]/g, "");
-      return emojiMap[clean] ? emojiMap[clean] : w;
-    });
-    setOutput(converted.join(" "));
+    const result = inputText
+      .toLowerCase()
+      .split("")
+      .map((char) => emojiMap[char] || char)
+      .join(" ");
+    setEmojiOutput(result);
+  };
+
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(emojiOutput);
+  };
+
+  const downloadOutput = () => {
+    const blob = new Blob([emojiOutput], { type: "text/plain" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "emoji-output.txt";
+    link.click();
   };
 
   return (
-    <div className="min-h-screen max-w-4xl mx-auto px-4 py-10">
-      <h1 className="text-3xl font-bold mb-4">Text to Emoji</h1>
+    <div className="tool-container">
+      <h2>Text to Emoji</h2>
+
       <textarea
-        rows={6}
-        className="w-full p-4 mb-4 border rounded bg-white dark:bg-gray-800"
-        placeholder="Type text like: I love coffee and cats"
-        value={input}
-        onChange={(e) => setInput(e.target.value)}
+        className="input-box"
+        rows={10}
+        placeholder="Enter text to convert to emojis..."
+        value={inputText}
+        onChange={(e) => setInputText(e.target.value)}
       />
-      <button onClick={convertToEmoji} className="btn">
-        Convert to Emoji
-      </button>
-      {output && (
-        <div className="mt-4 p-4 bg-gray-100 dark:bg-gray-900 rounded text-lg">
-          {output}
+
+      <button onClick={convertToEmoji}>Convert</button>
+
+      <textarea
+        className="output-box"
+        rows={10}
+        placeholder="Emoji output will appear here..."
+        value={emojiOutput}
+        readOnly
+      />
+
+      {emojiOutput && (
+        <div className="output-actions">
+          <button onClick={copyToClipboard}>Copy Output</button>
+          <button onClick={downloadOutput}>Download Output</button>
         </div>
       )}
     </div>

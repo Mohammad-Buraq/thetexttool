@@ -1,36 +1,82 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 function RemoveEmptyLines() {
-  const [input, setInput] = useState('');
-  const [output, setOutput] = useState('');
+  const [text, setText] = useState("");
 
-  const handleRemove = () => {
-    const cleaned = input.split('\n').filter(line => line.trim() !== '').join('\n');
-    setOutput(cleaned);
+  const removeEmptyLines = () => {
+    return text
+      .split("\n")
+      .filter(line => line.trim() !== "")
+      .join("\n");
+  };
+
+  const getLineStats = () => {
+    const allLines = text.split("\n");
+    const nonEmpty = allLines.filter(line => line.trim() !== "");
+    return {
+      original: allLines.length,
+      nonEmpty: nonEmpty.length,
+      removed: allLines.length - nonEmpty.length,
+    };
+  };
+
+  const cleanedText = removeEmptyLines();
+  const { original, nonEmpty, removed } = getLineStats();
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(cleanedText);
+    alert("Output copied to clipboard!");
+  };
+
+  const handleDownload = () => {
+    const blob = new Blob([cleanedText], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `no-empty-lines-${Date.now()}.txt`;
+    link.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const handleClear = () => {
+    setText("");
   };
 
   return (
-    <div className="max-w-3xl mx-auto py-10 px-4">
-      <h1 className="text-2xl font-bold mb-4">Remove Empty Lines</h1>
-      <p className="mb-4">Paste your text below. Click the button to remove all blank lines.</p>
+    <div className="tool-container">
+      <h2>Remove Empty Lines</h2>
+
+      {/* Input */}
       <textarea
-        className="w-full h-40 p-3 border rounded bg-white dark:bg-gray-800 dark:text-white"
-        placeholder="Paste your text here..."
-        value={input}
-        onChange={(e) => setInput(e.target.value)}
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+        placeholder="Paste your text with empty lines..."
+        rows={8}
+        className="form-control mb-3"
       ></textarea>
-      <button
-        onClick={handleRemove}
-        className="mt-4 px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-      >
-        Remove Empty Lines
-      </button>
-      <h2 className="text-xl font-semibold mt-6 mb-2">Cleaned Text</h2>
-      <textarea
-        className="w-full h-40 p-3 border rounded bg-gray-100 dark:bg-gray-700 dark:text-white"
-        readOnly
-        value={output}
-      ></textarea>
+
+      {/* Output */}
+      <div className="output-box p-3 border rounded mb-3 bg-light">
+        <p><strong>Original Lines:</strong> {original}</p>
+        <p><strong>Non-Empty Lines:</strong> {nonEmpty}</p>
+        <p><strong>Empty Lines Removed:</strong> {removed}</p>
+
+        <p><strong>Output:</strong></p>
+        <pre
+          className="border p-2 bg-white rounded"
+          style={{ whiteSpace: "pre-wrap", minHeight: "100px" }}
+          aria-label="Output text"
+        >
+          {cleanedText}
+        </pre>
+      </div>
+
+      {/* Buttons */}
+      <div className="d-flex flex-wrap gap-2">
+        <button onClick={handleCopy} className="btn btn-primary">Copy Output</button>
+        <button onClick={handleDownload} className="btn btn-secondary">Download Output</button>
+        <button onClick={handleClear} className="btn btn-outline-danger">Clear</button>
+      </div>
     </div>
   );
 }

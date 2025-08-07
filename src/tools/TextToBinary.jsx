@@ -1,60 +1,57 @@
 import React, { useState } from "react";
 
 function TextToBinary() {
-  const [text, setText] = useState("");
-  const [binary, setBinary] = useState("");
+  const [inputText, setInputText] = useState("");
+  const [binaryOutput, setBinaryOutput] = useState("");
 
   const convertToBinary = () => {
-    const result = text
+    const binary = inputText
       .split("")
-      .map(char => char.charCodeAt(0).toString(2).padStart(8, "0"))
+      .map((char) => char.charCodeAt(0).toString(2).padStart(8, "0"))
       .join(" ");
-    setBinary(result);
+    setBinaryOutput(binary);
   };
 
-  const clear = () => {
-    setText("");
-    setBinary("");
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(binaryOutput);
+  };
+
+  const downloadOutput = () => {
+    const blob = new Blob([binaryOutput], { type: "text/plain" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "binary-output.txt";
+    link.click();
   };
 
   return (
-    <div className="min-h-screen max-w-4xl mx-auto px-4 py-10">
-      <h1 className="text-3xl font-bold mb-2">Text to Binary</h1>
-      <p className="text-gray-600 dark:text-gray-400 mb-6">
-        Convert plain text into binary code.
-      </p>
+    <div className="tool-container">
+      <h2>Text to Binary</h2>
 
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-6">
-        <textarea
-          rows={4}
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          className="w-full p-4 mb-4 rounded border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-          placeholder="Enter text to convert..."
-        ></textarea>
+      <textarea
+        className="input-box"
+        rows={10}
+        placeholder="Enter text to convert to binary..."
+        value={inputText}
+        onChange={(e) => setInputText(e.target.value)}
+      />
 
-        <div className="flex gap-3 mb-4">
-          <button
-            onClick={convertToBinary}
-            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-          >
-            Convert
-          </button>
-          <button
-            onClick={clear}
-            className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
-          >
-            Clear
-          </button>
+      <button onClick={convertToBinary}>Convert</button>
+
+      <textarea
+        className="output-box"
+        rows={10}
+        placeholder="Binary output will appear here..."
+        value={binaryOutput}
+        readOnly
+      />
+
+      {binaryOutput && (
+        <div className="output-actions">
+          <button onClick={copyToClipboard}>Copy Output</button>
+          <button onClick={downloadOutput}>Download Output</button>
         </div>
-
-        {binary && (
-          <div className="text-sm text-gray-800 dark:text-gray-100 whitespace-pre-wrap break-words">
-            <strong>Binary Output:</strong><br />
-            {binary}
-          </div>
-        )}
-      </div>
+      )}
     </div>
   );
 }
