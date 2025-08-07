@@ -1,11 +1,5 @@
-// src/tools/TextToMorse.jsx
 import React, { useState } from "react";
 import ToolWrapper from "../components/ToolWrapper";
-import {
-  copyToClipboard,
-  downloadOutput,
-  clearAllFields,
-} from "../utils/toolUtils";
 
 const morseMap = {
   A: ".-", B: "-...", C: "-.-.", D: "-..", E: ".", F: "..-.",
@@ -29,6 +23,32 @@ function TextToMorse() {
       .map((char) => morseMap[char] || "")
       .join(" ");
     setMorse(result);
+  };
+
+  const copyToClipboard = async (text) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      alert("Copied to clipboard!");
+    } catch (err) {
+      alert("Failed to copy.");
+    }
+  };
+
+  const downloadOutput = (text, filename) => {
+    const blob = new Blob([text], { type: "text/plain" });
+    const href = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = href;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(href);
+  };
+
+  const clearAllFields = () => {
+    setText("");
+    setMorse("");
   };
 
   return (
@@ -56,7 +76,7 @@ function TextToMorse() {
         <button onClick={() => downloadOutput(morse, "morse-code.txt")}>
           Download Output
         </button>
-        <button onClick={() => clearAllFields(setText, setMorse)}>Clear</button>
+        <button onClick={clearAllFields}>Clear</button>
       </div>
     </ToolWrapper>
   );
